@@ -13,3 +13,8 @@ Moreover, the convergence properties for the disovery of dynamics using LMM has 
 5. Show that it works with different ML models
 6. Noisy data?
 7. Explainable AI?
+
+Practical issues:
+* noise
+* complete feature space unknown
+* missing time points, not enough time points
