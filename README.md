@@ -13,6 +13,7 @@ Moreover, the convergence properties for the disovery of dynamics using LMM has 
 5. Show that it works with different ML models
 6. Noisy data?
 7. Explainable AI?
+8. Deep Learning for solving ODE (symbolic integration)
 
 Practical issues:
 * noise
