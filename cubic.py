@@ -5,7 +5,7 @@ from scipy.integrate import odeint
 import argparse
 import pickle
 
-parser = argparse.ArgumentParser(description='Simulate cubic oscillator data and reconstruct the dynamics with lmmNet.')
+parser = argparse.ArgumentParser(description='Simulate cubic oscillator data and reconstruct the dynamics with lmmNet. Three family of schemes are trained separately, each using M = 1, 2, 3, 4, and 5.')
 parser.add_argument('minTime', type=int,
                    help='Lower bound for the time domain')
 parser.add_argument('maxTime', type=int,
