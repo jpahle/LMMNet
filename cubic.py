@@ -29,7 +29,7 @@ def f(x,t):
 
     return np.ravel(np.matmul(A,x.reshape(-1, 1)**3))
 
-def ml_f(x):
+def ml_f(x, model):
     """
     Define the derivatives (RHS of the ODE) learned by ML
     I think this is the best implementation (more robust than flatten())

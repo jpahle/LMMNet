@@ -7,20 +7,23 @@ import timeit
 class lmmNet:
     """
     Implementation of the LMMNet
-    version 1.1
+    version 1.2
     Fixes/updates:
+        * number of hidden layer units is no longer hardcoded
         * fixed bug for wrong indexing of the coefficients in computing linear diff operator
         * loss printed every 100 epochs
         * optimizer now declared in constructor
-        * fixed logical error in the computation of linear difference operator
+
     """
     
-    def __init__(self, h, X, M, scheme):
+    def __init__(self, h, X, M, scheme, hidden_units):
         """
         Args:
-        * step size h
-        * data array X with shape S x N x D 
-        * M number of LMM steps
+        h -- step size
+        X -- data array with shape S x N x D 
+        M -- number of LMM steps
+        scheme -- the LMM scheme (either AB, AM, or BDF)
+        hidden_units -- number of units for the hidden layer
         
         """
         self.h = h
