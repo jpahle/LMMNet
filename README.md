@@ -1,21 +1,37 @@
-# LMMNet
+# LmmNet
 
-Building on our previous work on inference/discovery/prediction of dynamics from time-series data, we now seek to avoid having to artifically compute the derivatives from training data via the use of Multistep methods. Intuitively, this can produce more robust results because the ML model can learn the local dynamics from several time steps, rather than predicting the derivative at any time point based only on the value at that time point.
+Here we blend the classical theory of Linear Multi-step Method with machine learning and neural networks (hence LmmNet). The convergence properties of LMM for learning dynamics has been studied by [Keller & Du, 2020](https://arxiv.org/abs/1912.12728).
 
-Moreover, the convergence properties for the disovery of dynamics using LMM has also been studied [Keller & Du, 2020](https://arxiv.org/abs/1912.12728).
+## Comparison with previous approach
+
+One difference is in the design choice: previous approach trained a different model for every species (dependent variable) considered. That is, the model assumed a mapping from multi-species concentrations X to single species derivatives y. The training is the repeated for all 10 metabolites as in [Costello & Martin, 2018](https://www.nature.com/articles/s41540-018-0054-3)
+
+`For i in 1 to 10:
+    Train model to approximate the function mapping
+    Metabolite1, Metabolite2, ..., Protein1, Protein2, ... -> Derivative of Metabolite i
+`
+
+However, in LmmNet, we reconstruct the dynamics of all species using a single function mapping
+
+`species1, species2, species3 -> species1, species2, species3`
+
+Advantages of LmmNet:
+* multi-step instead of single-step
+* avoids artificial computation of the derivatives to create suitable training data
+
+Disadvantages of LmmNet:
+* assumes regularly sampled time-series data (obvious solution: preprocessing)
 
 ## Milestones
 
-1. Show that lmmNet is able to recover the dynamics of the cubic oscillator (textbook problem in systems identification).
-2. Reproduce results from [Keller & Du, 2020](https://arxiv.org/abs/1912.12728) for the three major schemes of LMM (AM, AB, BDF) using different number of steps.
-3. Apply lmmNet to complex non-linear dynamics in biochemical systems
-4. Design a way to characterize errors? CV?
-5. Show that it works with different ML models
-6. Noisy data?
-7. Explainable AI?
-8. Deep Learning for solving ODE (symbolic integration)
+1. Study the stability behaviour of LmmNet for the 2-D oscillator problem, as in [Keller & Du, 2020](https://arxiv.org/abs/1912.12728)
+2. Study LmmNet for 2-D Bier model: different families of LMM, different number of steps, different time steps/grid sizes, how noise affects the predictions, LmmNet vs analytical solution, oscillatory vs bifurcation problems, different layers/units
+3. Extend LmmNet to use other machine learning methods, not just neural networks
+4. Inference of mechanistic insights (explainability)
+5. Extension to handle missing data and irregular time-series data
+6. Deep Learning for solving ODE (symbolic integration)
 
-Practical issues:
-* noise
-* complete feature space unknown
-* missing time points, not enough time points
+## Pending Tasks
+
+* Reproduce Hopf bifurcation and 6-D glycolysis results
+* Follow up with Keller et al. -- clarify how to choose $\hat{g}$ and their future direction.
