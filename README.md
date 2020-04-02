@@ -4,12 +4,13 @@ Here we blend the classical theory of Linear Multi-step Method with machine lear
 
 ## Comparison with previous approach
 
-One difference is in the design choice: previous approach trained a different model for every species (dependent variable) considered. That is, the model assumed a mapping from multi-species concentrations X to single species derivatives y. The training is the repeated for all 10 metabolites as in [Costello & Martin, 2018](https://www.nature.com/articles/s41540-018-0054-3)
+One difference is in the design choice: previous approach trained a different model for every species (dependent variable) considered. That is, the model assumed a mapping from multi-species concentrations X to single species derivatives y. The training is the repeated for all 10 metabolites as in [Costello & Martin, 2018](https://www.nature.com/articles/s41540-018-0054-3).
 
-`For i in 1 to 10:
+```
+For i in 1 to 10:
     Train model to approximate the function mapping
     Metabolite1, Metabolite2, ..., Protein1, Protein2, ... -> Derivative of Metabolite i
-`
+```
 
 However, in LmmNet, we reconstruct the dynamics of all species using a single function mapping
 
@@ -35,3 +36,4 @@ Disadvantages of LmmNet:
 
 * Reproduce Hopf bifurcation and 6-D glycolysis results
 * Follow up with Keller et al. -- clarify how to choose $\hat{g}$ and their future direction.
+* BioQuant internal seminar (16 April 2020)
