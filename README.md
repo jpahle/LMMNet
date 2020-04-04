@@ -31,6 +31,7 @@ Disadvantages of LmmNet:
 4. Inference of mechanistic insights (explainability)
 5. Extension to handle missing data and irregular time-series data
 6. Deep Learning for solving ODE (symbolic integration)
+7. Uncertainty Estimation
 
 ## Pending Tasks
 
