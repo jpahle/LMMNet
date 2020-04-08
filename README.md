@@ -26,7 +26,7 @@ Disadvantages of LmmNet:
 ## Milestones
 
 1. Study the stability behaviour of LmmNet for the 2-D oscillator problem, as in [Keller & Du, 2020](https://arxiv.org/abs/1912.12728)
-2. Study LmmNet for 2-D Bier model: different families of LMM, different number of steps, different time steps/grid sizes, how noise affects the predictions, LmmNet vs analytical solution, oscillatory vs bifurcation problems, different layers/units
+2. Study LmmNet for [2-D Bier model](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1300712/): different families of LMM, different number of steps, different time steps/grid sizes, how noise affects the predictions, LmmNet vs analytical solution, oscillatory vs bifurcation problems, different layers/units
 3. Extend LmmNet to use other machine learning methods, not just neural networks
 4. Inference of mechanistic insights (explainability)
 5. Extension to handle missing data and irregular time-series data
