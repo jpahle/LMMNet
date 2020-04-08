@@ -61,7 +61,7 @@ class lmmNet:
                 super(DenseModel, self).__init__()
                 self.D = D
 
-                self.d1 = tf.keras.layers.Dense(units=256, activation=tf.nn.tanh, input_shape=(self.D,))
+                self.d1 = tf.keras.layers.Dense(units=hidden_units, activation=tf.nn.tanh, input_shape=(self.D,))
                 self.d2 = tf.keras.layers.Dense(units=self.D, activation=None)
 
             def call(self, X1):
