@@ -112,12 +112,12 @@ if __name__ == "__main__":
     hidden_layer_units = 256 # number of units for the hidden layer
     M = args.M # number of steps
     scheme = args.scheme # LMM scheme
-    model = lmmNet(h, gly_data, M, scheme, hidden_layer_units)
+    model = lmmNet(step, gly_data, M, scheme, hidden_layer_units)
 
     N_Iter = 10000
     model.train(N_Iter)
     
-    gly_pred = odeint(ml_f, x0, time_points, args=(model,))
+    gly_pred = odeint(ml_f, x_init, time_points, args=(model,))
     
     glycolysis = {}
     
