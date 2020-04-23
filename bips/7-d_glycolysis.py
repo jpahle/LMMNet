@@ -3,21 +3,15 @@ import numpy as np
 from scipy.integrate import odeint
 import argparse
 import pickle
+from utils import *
 
 parser = argparse.ArgumentParser(description='Simulate 7-D Yeast Glycolysis Oscillator and reconstruct the dynamics with lmmNet.')
-parser.add_argument('minTime', type=int,
-                   help='Lower bound for the time domain')
-parser.add_argument('maxTime', type=int,
-                   help='Upper bound for the time domain')
-parser.add_argument('stepSize', type=float, 
-                   help='The mesh size')
 parser.add_argument('--noise', action='store',default=0.0, type=float,
                    help='strenght of noise to be added to the training data (default: 0.00)')
 parser.add_argument('--scheme', action='store',default='AM', type=str,
                    help='The family of LMM to use: choose from AM, AB, or BDF.')
 parser.add_argument('--M', type=int, default=1,
                    help='the number of steps to use.')
-
 
 def f(x, params, N = 1., A = 4., phi = 0.1):
     """
@@ -31,6 +25,12 @@ def f(x, params, N = 1., A = 4., phi = 0.1):
     * A -- total concentration of ADP and ATP
     * phi -- ratio of the total cellular volume to the extracellular volume
     """
+    
+    if params == None:
+        params = {'Jin': 2.5, 'KI':0.52,
+         'k1': 100., 'k2': 6., 'k3': 16., 'k4': 100., 'k5': 1.28, 'k6': 12.,
+          'kappa': 13., 'q': 4, 'k': 1.8}
+        
     Jin = params['Jin']
     k1 = params['k1']
     k2 = params['k2']
@@ -56,36 +56,20 @@ def f(x, params, N = 1., A = 4., phi = 0.1):
     return np.array([ds1, ds2, ds3, ds4, ds5, ds6, ds7])
 
 
-def ml_f(x, t, model):
-    """
-    Define the derivatives learned by ML
-    I think this is the best implementation, more robust than flatten()
-    
-    Args:
-    x -- values for the current time point
-    t -- time, dummy argument to conform with scipy's API
-    model -- the learned ML model
-    """
-    return np.ravel(model.predict(x.reshape(1,-1)))
-
-
 if __name__ == "__main__":
     
     global args
     args = parser.parse_args()
     
     # Define the grid
-    start_time = args.minTime # default 0
-    end_time = args.maxTime # default 10
-    step = args.stepSize # default 0.01
+    start_time = 0
+    end_time = 10
+    step = 0.01
     time_points = np.arange(start_time, end_time, step)
     
     params = {'Jin': 2.5, 'KI':0.52,
          'k1': 100., 'k2': 6., 'k3': 16., 'k4': 100., 'k5': 1.28, 'k6': 12.,
           'kappa': 13., 'q': 4, 'k': 1.8}
-
-    #testing to see if it works
-    #f(np.zeros(7), params)
     
     # initial conditions are taken from
     # https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0119821#pone-0119821-t002

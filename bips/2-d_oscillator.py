@@ -4,6 +4,7 @@ import numpy as np
 from scipy.integrate import odeint
 import argparse
 import pickle
+from utils import *
 
 parser = argparse.ArgumentParser(description='Simulate cubic oscillator data and reconstruct the dynamics with lmmNet. Three family of schemes are trained separately, each using M = 1, 2, 3, 4, and 5.')
 parser.add_argument('minTime', type=int,
@@ -14,27 +15,7 @@ parser.add_argument('stepSize', type=float,
                    help='The mesh size')
 parser.add_argument('--noise', action='store',default=0.0, type=float,
                    help='strenght of noise to be added to the training data (default: 0.00)')
-parser.add_argument('--skip', action='store',default=1, type=int,
-                   help='number of observation points to skip when generating training data (default: 1)')
 
-
-def f(x,t):
-    """
-    Return the derivatives (RHS of the ODE)
-    This is a linear system with the form f = A x
-    Args:
-    x -- a 2 x 1 vector of measurements
-    """
-    A = np.array([[-0.1, 2], [-2,-0.1]]) # 2 x 2
-
-    return np.ravel(np.matmul(A,x.reshape(-1, 1)**3))
-
-def ml_f(x, model):
-    """
-    Define the derivatives (RHS of the ODE) learned by ML
-    I think this is the best implementation (more robust than flatten())
-    """
-    return np.ravel(model.predict(x.reshape(1,-1)))
     
 
 if __name__ == "__main__":
