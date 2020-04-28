@@ -4,6 +4,7 @@
 from bips.lmmNet import lmmNet
 from bips.utils import *
 from bips.systems import *
+from bips.integrator import *
 
 import numpy as np
 from scipy.integrate import odeint
@@ -17,6 +18,8 @@ parser.add_argument('--system', action='store',default='cubic', type=str,
                    help='Choose a system to simulate and discover.')
 parser.add_argument('--filename', action='store', type=str,
                    help='The name of the file to save the output to.')
+parser.add_argument('--integrator', action='store', type=str, default='scipy',
+                   help='Integrator to use: either scipy or bips')
 parser.add_argument('--M', type=int, default=1,
                    help='the number of steps to use.')
 
@@ -66,7 +69,11 @@ if __name__ == "__main__":
 
     
     time_points = np.arange(t0, T, h)
-    data = odeint(f, x0, time_points)
+    
+    if args.integrator == 'scipy':
+        data = odeint(f, x0, time_points)
+    elif args.integrator == 'bips':
+        data = integrate_bips(f, x0, time_points)
     
     noise_strength = args.noise
     data = add_noise(data, noise_strength)
@@ -76,7 +83,11 @@ if __name__ == "__main__":
     N_Iter = 10000
     model.train(N_Iter)
     
-    pred = odeint(ml_f, x0, time_points, args=(model,))
+    # TODO: change to a new integrator
+    if args.integrator == 'scipy':
+        pred = odeint(ml_f, x0, time_points, args=(model,))
+    elif args.integrator == 'bips':
+        pred = integrate_bips(lambda x,t: ml_f(x,t, model), x0, time_points)
     
     result_dict = {}
     result_dict['data'] = data
