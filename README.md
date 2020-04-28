@@ -35,6 +35,6 @@ Disadvantages of LmmNet:
 
 ## Pending Tasks
 
-* Reproduce Hopf bifurcation and 6-D glycolysis results
-* Follow up with Keller et al. -- clarify how to choose $\hat{g}$ and their future direction.
-* BioQuant internal seminar (16 April 2020)
+## Pinned
+
+* [Git style guide](https://udacity.github.io/git-styleguide/)
