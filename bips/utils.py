@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def add_noise(lorenz_data, noise_strength):
     """
     Add noise to the training data

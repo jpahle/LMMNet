@@ -4,6 +4,10 @@ import nodepy.linear_multistep_method as lm
 import numpy as np
 import timeit
 
+import os
+
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
+
 class lmmNet:
     """
     Implementation of the LMMNet
