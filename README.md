@@ -38,3 +38,4 @@ Disadvantages of LmmNet:
 ## Pinned
 
 * [Git style guide](https://udacity.github.io/git-styleguide/)
+* [License](https://choosealicense.com/)
