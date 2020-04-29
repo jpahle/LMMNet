@@ -44,7 +44,8 @@ def integrate_bips(g,y0,times):
                 dt = max_delT
 
             value = r.integrate(r.t + dt)
-            value = np.max([value, 0.])
+            #print("value: ", value)
+            value = np.max([value, np.zeros(2)], axis=0)
             currentT = r.t
             
             f.value = currentT
