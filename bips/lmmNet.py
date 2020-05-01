@@ -129,13 +129,10 @@ class lmmNet:
             grads = tape.gradient(self.loss, self.nn.trainable_variables)
             self.opt.apply_gradients(zip(grads, self.nn.trainable_variables))
             
-            if tf.executing_eagerly():
-                current_loss = self.loss.numpy()
-            else:
-                current_loss = self.loss.eval()
             if epoch % 100 == 0:
                 elapsed_time = timeit.default_timer() - start_time
-                print('Epoch: %d, Loss: %.3e, Time: %.2f' %(epoch, current_loss, elapsed_time))
+                print('Epoch: %d, Time: %.2f' %(epoch, elapsed_time))
+                print('Loss', self.loss)
 
         
     def predict(self, X_reshaped):
