@@ -14,7 +14,7 @@ import pickle
 parser = argparse.ArgumentParser(description='Simulate a dynamical system and reconstruct the dynamics with lmmNet.')
 parser.add_argument('--noise', action='store',default=0.0, type=float,
                    help='strenght of noise to be added to the training data (default: 0.00)')
-parser.add_argument('--system', action='store',default='cubic', type=str,
+parser.add_argument('--system', action='store',default='Cubic', type=str,
                    help='Choose a system to simulate and discover.')
 parser.add_argument('--filename', action='store', type=str,
                    help='The name of the file to save the output to.')
