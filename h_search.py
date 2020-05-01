@@ -60,8 +60,8 @@ if __name__ == "__main__":
         t0, T, h = 0, 10, 0.01
         f = ruoff
     
-    #h_list = [0.001, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.6]
-    h_list = [0.6, 0.2, 0.1, 0.05, 0.02, 0.01, 0.005, 0.001]
+    h_list = [0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2]
+    #h_list = [0.6, 0.2, 0.1, 0.05, 0.02, 0.01, 0.005, 0.001]
     hidden_layer_units = 256 # number of units for the hidden layer
     M = 1 # number of steps
     scheme = 'AM' # LMM scheme
