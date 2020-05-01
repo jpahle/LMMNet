@@ -131,7 +131,7 @@ class lmmNet:
             
             if epoch % 100 == 0:
                 elapsed_time = timeit.default_timer() - start_time
-                print('Epoch: %d, Loss: %.3e, Time: %.2f' %(epoch, self.loss, elapsed_time))
+                print('Epoch: %d, Loss: %.3e, Time: %.2f' %(epoch, float(self.loss), elapsed_time))
 
         
     def predict(self, X_reshaped):
