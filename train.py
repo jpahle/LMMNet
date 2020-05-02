@@ -35,7 +35,8 @@ if __name__ == "__main__":
         # 2-D Bier settings
         t0, T, h = 0, 500, 0.2 #seconds
         x0 = np.array([4, 3]) #initial conditions: ATP = 4, G = 3 -- default Bier model
-        f = bier
+        params = {'Vin': 0.36, 'k1': 0.02, 'kp':4, 'km':15} # damped oscillation
+        f = lambda x, t: bier(x, t, params)
     elif args.system == 'Cubic':
         # 2-D Cubic settings
         t0, T, h = 0, 25, 0.01
