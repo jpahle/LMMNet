@@ -33,12 +33,12 @@ if __name__ == "__main__":
     
     if args.system == 'Bier':
         # 2-D Bier settings
-        t0, T, h = 0, 500, 0.01 #seconds
+        t0, T, h = 0, 500, 0.2 #seconds
         x0 = np.array([4, 3]) #initial conditions: ATP = 4, G = 3 -- default Bier model
         f = bier
     elif args.system == 'Cubic':
         # 2-D Cubic settings
-        t0, T, h = 0, 25, 0.05
+        t0, T, h = 0, 25, 0.01
         x0 = np.array([2,0]) # initial conditions -- default cubic problem
         f = cubic # the system to study
     elif args.system == 'Lorenz':
