@@ -2,23 +2,17 @@ import tensorflow as tf
 from tensorflow.keras import Model
 import nodepy.linear_multistep_method as lm
 import numpy as np
-from scipy.integrate import odeint
 import timeit
-import argparse
-import pickle
 
 tf.keras.backend.set_floatx('float32')
 
+import os
+os.environ['KMP_DUPLICATE_LIB_OK']='True' # for MAC OS
+
 class lmmNet:
     """
-    Implementation of the LMMNet
-    version 1.2
-    Fixes/updates:
-        * number of hidden layer units is no longer hardcoded
-        * fixed bug for wrong indexing of the coefficients in computing linear diff operator
-        * loss printed every 100 epochs
-        * optimizer now declared in constructor
-
+    A feed-forward Neural Network with one hidden layer embedded in the framework of linear multistep method.
+    This model learns full dynamics of a dynamical system and can predict the derivatives at any point.
     """
     
     def __init__(self, h, X, M, scheme, hidden_units):
