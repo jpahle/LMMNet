@@ -1,8 +1,4 @@
-# Kevin Siswandi
-# April 2020
-
-from bips.lmmNet import lmmNet
-from bips.utils import *
+from model import lmmNet
 from bips.systems import *
 from bips.integrator import *
 
@@ -11,21 +7,39 @@ from scipy.integrate import odeint
 import argparse
 import pickle
 
-parser = argparse.ArgumentParser(description='Simulate a dynamical system and reconstruct the dynamics with lmmNet.')
-parser.add_argument('--noise', action='store',default=0.0, type=float,
-                   help='strenght of noise to be added to the training data (default: 0.00)')
-parser.add_argument('--system', action='store',default='Cubic', type=str,
-                   help='Choose a system to simulate and discover.')
-parser.add_argument('--filename', action='store', type=str,
-                   help='The name of the file to save the output to.')
-parser.add_argument('--integrator', action='store', type=str, default='scipy',
-                   help='Integrator to use: either scipy or bips')
-parser.add_argument('--M', type=int, default=1,
-                   help='the number of steps to use.')
+def add_noise(lorenz_data, noise_strength):
+    """
+    Add noise to the training data
+    
+    Args:
+        lorenz_data -- the dataset to use
+        noise_strength
+        
+    Returns:
+        a dataset with shape 1 x -1 as expected by LmmNet function call
+    """
+    # add Gaussian noise scaled by standard deviation, for every one of the three dimensions
+    lorenz_data += noise_strength * lorenz_data.std(0) * np.random.randn(lorenz_data.shape[0], lorenz_data.shape[1])
+
+    lorenz_data = np.reshape(lorenz_data, (1,lorenz_data.shape[0], lorenz_data.shape[1]))
+    
+    return lorenz_data
+
 
 if __name__ == "__main__":
     
-    global args
+    parser = argparse.ArgumentParser(description='Simulate a dynamical system and reconstruct the dynamics with lmmNet.')
+    parser.add_argument('--noise', action='store',default=0.0, type=float,
+                       help='strenght of noise to be added to the training data (default: 0.00)')
+    parser.add_argument('--system', action='store',default='Cubic', type=str,
+                       help='Choose a system to simulate and discover.')
+    parser.add_argument('--filename', action='store', type=str,
+                       help='The name of the file to save the output to.')
+    parser.add_argument('--integrator', action='store', type=str, default='scipy',
+                       help='Integrator to use: either scipy or bips')
+    parser.add_argument('--M', type=int, default=1,
+                       help='the number of steps to use.')
+
     args = parser.parse_args()
     
     # EDIT THIS FOR YOUR PURPOSE
