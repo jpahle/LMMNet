@@ -117,7 +117,7 @@ if __name__ == "__main__":
     M = 1 # number of steps
     scheme = 'AM' # LMM scheme
     
-    time_points, data = create_training_data(t0, T, h, f, x0, args.integrator)
+    time_points, data = create_training_data(t0, T, h, f, x0)
 
     net = lmmNet(h, data, M, scheme, hidden_layer_units)
 
