@@ -1,29 +1,70 @@
 from model import lmmNet
-from bips.systems import *
-from bips.integrator import *
-
+from predict import *
 import numpy as np
+import tensorflow as tf
 from scipy.integrate import odeint
 import argparse
 import pickle
 
-def add_noise(lorenz_data, noise_strength):
+def bier(x,t, params=None):
     """
-    Add noise to the training data
+    2-D Yeast Glycolytic oscillator model
+    
+    Args:
+        x -- a 2 x 1 vector of measurements
+        t -- time, ignored
+        
+    Return:
+        A numpy array containing the derivatives
+    """
+    if params == None:
+        # default parameter values
+        Vin = 0.36
+        k1 = 0.02
+        kp = 6
+        km = 12
+    else:
+        Vin = params['Vin']
+        k1 = params['k1']
+        kp = params['kp']
+        km = params['km']
+    
+    r1 = 2 * k1 * x[0] * x[1] - kp * x[0]/(x[0] + km) # ATP
+    r2 = Vin - k1 * x[0] * x[1] #G
+    
+    return np.ravel(np.array([r1, r2]))
+
+def create_training_data(start_time, end_time, step_size, f, x0, integrator='scipy', noise_strength=0):
+    """
+    Create tensor array for training by solving the initial value problem and adding noise
     
     Args:
         lorenz_data -- the dataset to use
         noise_strength
+        start_time
+        end_time
+        step_size
+        f -- the function to integrate
+        x0 -- the initial conditions
+        integrator -- the numerical method library to use (currently supports only scipy)
         
     Returns:
-        a dataset with shape 1 x -1 as expected by LmmNet function call
+        A tuple consisting of
+        * time points of the grid
+        * a tensor array with shape 1 x -1 as expected by LmmNet function call
     """
-    # add Gaussian noise scaled by standard deviation, for every one of the three dimensions
-    lorenz_data += noise_strength * lorenz_data.std(0) * np.random.randn(lorenz_data.shape[0], lorenz_data.shape[1])
-
-    lorenz_data = np.reshape(lorenz_data, (1,lorenz_data.shape[0], lorenz_data.shape[1]))
+    time_points = np.arange(start_time, end_time, step_size)
     
-    return lorenz_data
+    # choice of bips integrator (this is future work)
+    if integrator == 'scipy':
+        array = odeint(f, x0, time_points)
+    elif integrator == 'bips':
+        array = integrate_bips(f, x0, time_points)
+        
+    array += noise_strength * array.std(0) * np.random.randn(array.shape[0], array.shape[1])
+    training_data = np.reshape(array, (1,array.shape[0], array.shape[1]))
+    
+    return time_points, tf.convert_to_tensor(training_data, dtype=tf.float32)
 
 
 if __name__ == "__main__":
@@ -31,7 +72,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Simulate a dynamical system and reconstruct the dynamics with lmmNet.')
     parser.add_argument('--noise', action='store',default=0.0, type=float,
                        help='strenght of noise to be added to the training data (default: 0.00)')
-    parser.add_argument('--system', action='store',default='Cubic', type=str,
+    parser.add_argument('--system', action='store',default='Bier', type=str,
                        help='Choose a system to simulate and discover.')
     parser.add_argument('--filename', action='store', type=str,
                        help='The name of the file to save the output to.')
@@ -41,9 +82,6 @@ if __name__ == "__main__":
                        help='the number of steps to use.')
 
     args = parser.parse_args()
-    
-    # EDIT THIS FOR YOUR PURPOSE
-    # DEFINE THE PROBLEM
     
     if args.system == 'Bier':
         # 2-D Bier settings
@@ -79,30 +117,17 @@ if __name__ == "__main__":
     M = 1 # number of steps
     scheme = 'AM' # LMM scheme
     
-    ####
-    #### END EDITABLE PARAMETERS
+    time_points, data = create_training_data(t0, T, h, f, x0, args.integrator)
 
-    
-    time_points = np.arange(t0, T, h)
-    
-    if args.integrator == 'scipy':
-        data = odeint(f, x0, time_points)
-    elif args.integrator == 'bips':
-        data = integrate_bips(f, x0, time_points)
-    
-    noise_strength = args.noise
-    data = add_noise(data, noise_strength)
-
-    model = lmmNet(h, data, M, scheme, hidden_layer_units)
+    net = lmmNet(h, data, M, scheme, hidden_layer_units)
 
     N_Iter = 10000
-    model.train(N_Iter)
+    net.train(N_Iter)
     
-    # TODO: change to a new integrator
     if args.integrator == 'scipy':
-        pred = odeint(ml_f, x0, time_points, args=(model,))
+        pred = odeint(ml_f, x0, time_points, args=(net,))
     elif args.integrator == 'bips':
-        pred = integrate_bips(lambda x,t: ml_f(x,t, model), x0, time_points)
+        pred = integrate_bips(lambda x,t: predict_fn(x,t, model), x0, time_points)
     
     result_dict = {}
     result_dict['data'] = data
