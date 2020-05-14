@@ -17,6 +17,11 @@ Here we blend the classical theory of Linear Multi-step Method with machine lear
 * Numerics Framework: NodePy, SymPy
 * Scientific Computing Stack: SciPy, NumPy
 
+### Upcoming Events
+
+- [Fields Symposium, September 21-25 2020](https://sites.google.com/site/boumedienehamzi/second-symposium-on-machine-learning-and-dynamical-systems)
+- [SAMM 2020](https://www.mpi-magdeburg.mpg.de/csc/events/samm20)
+
 ### References
 
 The primary materials I consult are
@@ -27,10 +32,11 @@ The primary materials I consult are
 * Villaverde, A. F. & Banga, J. R. Reverse engineering and identification in systems biology: strategies, perspectives and challenges. J. R. Soc. Interface 11, 20130505 (2013).
 * [Rackauckas, Ma, Martensen, Warner, Zubov, Supekar, Skinner, Ramadhan (2020)](https://arxiv.org/abs/2001.04385): Augmentation of differential equations with machine-learnable components (termed Universal Differential Equations/UDE) for discovering governing equations from data
 * [Bier, Bakker, Westerhoff (2000)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1300712/): ODE Model for 2-D Yeast Glycolytic Oscillator
+* [Costello & Martin (2018)](https://www.nature.com/articles/s41540-018-0054-3): Prediction of dynamics by explicitly computing the derivatives to get labeled data, applied to the mevalonate pathway.
 
 ### Comparison with previous approach
 
-One difference is in the design choice: previous approach trained a different model for every species (dependent variable) considered. That is, the model assumed a mapping from multi-species concentrations X to single species derivatives y. The training is the repeated for all 10 metabolites as in [Costello & Martin, 2018](https://www.nature.com/articles/s41540-018-0054-3).
+One difference is in the design choice: previous approach trained a different model for every species (dependent variable) considered. That is, the model assumed a mapping from multi-species concentrations X to single species derivatives y. The training is the repeated for all 10 metabolites.
 
 ```
 For i in 1 to 10:
@@ -55,3 +61,4 @@ Disadvantages of LmmNet:
 2. Explain model predictions
 3. Extend LmmNet to handle missing data and irregular and noisy time-series data
 4. Quantify uncertainty of the predictions
+
