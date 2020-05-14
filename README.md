@@ -1,8 +1,34 @@
-# LmmNet
+# Predicting the Dynamics of Biochemical Systems with Machine Learning and Multi-step Methods
 
-Here we blend the classical theory of Linear Multi-step Method with machine learning and neural networks (hence LmmNet). The convergence properties of LMM for learning dynamics has been studied by [Keller & Du, 2020](https://arxiv.org/abs/1912.12728).
+## Master Thesis
 
-## Comparison with previous approach
+Empirical Dynamic Modeling for [Systems Biology](https://en.wikipedia.org/wiki/Systems_biology) with Machine Learning  
+Kevin Siswandi  
+May 2020  
+https://github.com/jpahle/LMMNet  
+
+### About the Project
+
+Here we blend the classical theory of Linear Multi-step Method with machine learning and neural networks (hence LmmNet).
+
+### Software and Libraries
+
+* Deep Learning Framework: TensorFlow 2.0
+* Numerics Framework: NodePy, SymPy
+* Scientific Computing Stack: SciPy, NumPy
+
+### References
+
+The primary materials I consult are
+* [Keller & Du (2020)](https://arxiv.org/abs/1912.12728): Study of the convergence properties of LMM for learning dynamics
+* [Raissi, Perdikaris & Karniadakis (2018)](https://maziarraissi.github.io/research/7_multistep_neural_networks/): Multistep neural network for discovery of dynamics on benchmark problems
+* [Systems Identification](https://www.mathworks.com/help/ident/gs/about-system-identification.html): Introduction to mathematical modeling of dynamical systems from measurements.
+* [Kanschat & Scheichl (2019)](https://www.mathsim.eu/~gkanscha/notes/ode.pdf): Lecture notes on numerical methods for ODE, including LMM (chapter 5)
+* Villaverde, A. F. & Banga, J. R. Reverse engineering and identification in systems biology: strategies, perspectives and challenges. J. R. Soc. Interface 11, 20130505 (2013).
+* [Rackauckas, Ma, Martensen, Warner, Zubov, Supekar, Skinner, Ramadhan (2020)](https://arxiv.org/abs/2001.04385): Augmentation of differential equations with machine-learnable components (termed Universal Differential Equations/UDE) for discovering governing equations from data
+* [Bier, Bakker, Westerhoff (2000)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1300712/): ODE Model for 2-D Yeast Glycolytic Oscillator
+
+### Comparison with previous approach
 
 One difference is in the design choice: previous approach trained a different model for every species (dependent variable) considered. That is, the model assumed a mapping from multi-species concentrations X to single species derivatives y. The training is the repeated for all 10 metabolites as in [Costello & Martin, 2018](https://www.nature.com/articles/s41540-018-0054-3).
 
@@ -23,19 +49,9 @@ Advantages of LmmNet:
 Disadvantages of LmmNet:
 * assumes regularly sampled time-series data (obvious solution: preprocessing)
 
-## Milestones
+### Pending Features
 
-1. Study the stability behaviour of LmmNet for the 2-D oscillator problem, as in [Keller & Du, 2020](https://arxiv.org/abs/1912.12728)
-2. Study LmmNet for [2-D Bier model](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1300712/): different families of LMM, different number of steps, different time steps/grid sizes, how noise affects the predictions, LmmNet vs analytical solution, oscillatory vs bifurcation problems, different layers/units
-3. Extend LmmNet to use other machine learning methods, not just neural networks
-4. Inference of mechanistic insights (explainability)
-5. Extension to handle missing data and irregular time-series data
-6. Deep Learning for solving ODE (symbolic integration)
-7. Uncertainty Estimation
-
-## Pending Tasks
-
-## Pinned
-
-* [Git style guide](https://udacity.github.io/git-styleguide/)
-* [License](https://choosealicense.com/)
+1. Extend LmmNet to use other machine learning methods
+2. Explain model predictions
+3. Extend LmmNet to handle missing data and irregular and noisy time-series data
+4. Quantify uncertainty of the predictions
