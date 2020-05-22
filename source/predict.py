@@ -1,4 +1,4 @@
-from model import lmmNet
+from .model import lmmNet
 import numpy as np
 import tensorflow as tf
 
