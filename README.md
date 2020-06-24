@@ -11,6 +11,9 @@ https://github.com/jpahle/LMMNet
 
 Here we blend the classical theory of Linear Multi-step Method with machine learning and neural networks (hence LmmNet).
 
+![Learnt Dynamics for Hopf Bifurcation](image/learnt-hopf.png)
+
+
 ### Software and Libraries
 
 * Deep Learning Framework: TensorFlow 2.0
