@@ -87,7 +87,8 @@ def simulate_default(debug=False):
     
     return time_points, novak_data
 
-def simulate_custom(tfirst=0, tlast=300, step_size=0.2, cyclin=22, MPF=11):
+def simulate_custom(tfirst=0, tlast=300, step_size=0.2, cyclin=22, MPF=11,
+                   wee1_total=1, cdc25_total=5, APC_total=1, IE_total=1):
     """
     Simulate the Novak Tyson Cell Cycle Model
     
@@ -96,7 +97,11 @@ def simulate_custom(tfirst=0, tlast=300, step_size=0.2, cyclin=22, MPF=11):
     - virtual time-series measurements for each biochemical species
     """
     
-
+    globals()['wee1_total'] = wee1_total
+    globals()['cdc25_total'] = cdc25_total
+    globals()['APC_total'] = APC_total
+    globals()['IE_total'] = IE_total
+    
     # define initial conditions
     preMPF = 0
     cdc25P = 0
@@ -109,8 +114,8 @@ def simulate_custom(tfirst=0, tlast=300, step_size=0.2, cyclin=22, MPF=11):
     default = {'k1':1, 'k3':0.005,
               'ka':.02,'Ka':.1,'kb':.1,'Kb':1, 'kc':.13, 'Kc':.01, 'kd':.13, 'Kd':1,
              'v2_1':.005, 'v2_2':.25, 'vwee_1':.01, 'vwee_2':1, 'v25_1':0.5*.017, 'v25_2':0.5*.17,
-             'ke':.02, 'Ke':1, 'kf':.1, 'Kf':1, 'kg':.02, 'Kg':.01, 'kh':.15, 'Kh':.01,
-             'wee1_total':1, 'PPase':1, 'CDK_total':100, 'cdc25_total':5,'IE_total':1, 'APC_total':1}
+             'ke':.02, 'Ke':1, 'kf':.1, 'Kf':1, 'kg':.02, 'Kg':.01, 'kh':.15, 'Kh':.01, 'PPase':1, 'CDK_total':100, 'IE_total':1, 'APC_total':1}
+    
     for key,val in default.items():
         globals()[key]=val
     
