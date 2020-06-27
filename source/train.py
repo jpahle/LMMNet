@@ -48,10 +48,10 @@ def f_cubic(x,t):
 
 def create_training_data(start_time, end_time, step_size, f, x0, integrator='scipy', noise_strength=0):
     """
-    Create tensor array for training by solving the initial value problem and adding noise
+    Create tensor array for training by solving the initial value problem and adding noise.
+    The ODE is integrated using LSODA from scipy.
     
     Args:
-        lorenz_data -- the dataset to use
         noise_strength
         start_time
         end_time

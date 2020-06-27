@@ -50,7 +50,12 @@ def f_NovakTyson(x,t):
 
 def simulate_default(debug=False):
     """
-    Simulate the Novak Tyson Cell Cycle Model
+    Simulate the Novak Tyson Cell Cycle Model with default parameters.
+    The parameters can be categorized into a few classes:
+    * The lowercase k's are maximal rates (usually kcat)
+    * The uppercasse K's are Michaelis constants
+    * Total protein concentrations
+    * The v's are weighting parameters for computing intermediate constants
     
     Returns:
     - time points
@@ -91,7 +96,7 @@ def simulate_custom(tfirst=0, tlast=300, step_size=0.2, cyclin=0, MPF=0,
                    wee1_total=1, cdc25_total=5, APC_total=1, IE_total=1,
                    k1=1, v2_1 = .005, v2_2 = .25):
     """
-    Simulate the Novak Tyson Cell Cycle Model
+    Simulate the Novak Tyson Cell Cycle Model with custom parameters.
     
     Arguments:
     - cdc25_total = Total cdc25 (needed to maintain cyclin and MPF oscillations)
