@@ -1,5 +1,5 @@
-from .model import lmmNet
-from .predict import *
+from model import lmmNet
+from predict import *
 import numpy as np
 import tensorflow as tf
 from scipy.integrate import odeint

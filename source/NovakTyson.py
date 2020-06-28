@@ -1,6 +1,6 @@
 import numpy as np
 import pickle
-from .train import create_training_data
+from train import create_training_data
 
 def f_NovakTyson(x,t):
     """
@@ -138,7 +138,7 @@ def simulate_custom(tfirst=0, tlast=300, step_size=0.2, cyclin=0, MPF=0,
     
     return time_points, novak_data
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     time_points, novak_data = simulate_default()
 
@@ -146,5 +146,5 @@ if __name__ == '__main__':
     result_dict['data'] = novak_data
     result_dict['t'] = time_points
     
-    with open(str('../data/novak_tyson.pkl'), 'wb') as file:
+    with open(str('novak_tyson.pkl'), 'wb') as file:
             pickle.dump(result_dict, file)
