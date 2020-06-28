@@ -111,7 +111,7 @@ class lmmNet:
         
         return self.D * tf.reduce_mean(tf.square(Y))
     
-    def train(self, epochs):
+    def train(self, epochs, debug=True):
         """
         Fit the model PyTorch-style
         """
@@ -126,8 +126,9 @@ class lmmNet:
             
             if epoch % 100 == 0:
                 elapsed_time = timeit.default_timer() - start_time
-                #print('Epoch: %d, Time: %.2f, Loss: %.4e' %(epoch, elapsed_time, self.loss))
-                #tf.print(self.loss)
+                if debug:
+                    print('Epoch: %d, Time: %.2f, Loss: %.4e' %(epoch, elapsed_time, self.loss))
+                    #tf.print(self.loss)
 
         
     def predict(self, X_reshaped):
