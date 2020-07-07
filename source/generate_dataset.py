@@ -1,3 +1,5 @@
+import pandas as pd
+
 def generate_dataset(data, strain_list, feature_list, target_list, n_dim):
     
     """
@@ -28,7 +30,7 @@ def generate_dataset(data, strain_list, feature_list, target_list, n_dim):
             measurement_series = data.loc[strain][measurement]
             T = data.loc[strain]['Hour'] # series of time points
             
-            ## TODO: extract the start time and end time and the time step
+            ## extract the start time and end time and the time step
             minT,maxT = min(T),max(T) # start time and end time
             delT = (maxT - minT)/n_dim # time step for interpolation
         
@@ -37,18 +39,18 @@ def generate_dataset(data, strain_list, feature_list, target_list, n_dim):
                                      measurement_series.tolist(),
                                      kind='linear')
             
-            # TODO: generate time points to interpolate over using np.linspace
+            # generate time points to interpolate over using np.linspace
             time_points = np.linspace(minT,maxT,n_dim)
             
             # Consider the interpolated data over time
             interpolated_measurement = interpolation(time_points)
             
-            # TODO: apply savgol filter to interpolated measurement, using window length of 7 and polyorder of 2
+            # apply savgol filter to interpolated measurement, using window length of 7 and polyorder of 2
             filtered_measurement = savgol_filter(interpolated_measurement,
                                                  window_length=7,
                                                  polyorder=2)
 
-            # TODO: fill in the data to a multi-index data frame
+            # fill in the data to a multi-index data frame
             if measurement in feature_list:
                 # use the filtered measurement of this enzyme as features
                 measurement_data[('feature',measurement)] = filtered_measurement # YOUR CODE HERE
@@ -56,7 +58,7 @@ def generate_dataset(data, strain_list, feature_list, target_list, n_dim):
                 # use the filtered measurment of this metabolite as a feature
                 measurement_data[('feature',measurement)] = filtered_measurement # YOUR CODE HERE
                 # additionally compute gradients of the filtered measurement and use it as target
-                measurement_data[('target',measurement)] = np.gradient([point/delT for point in filtered_measurement]) # YOUR CODE HERE
+                measurement_data[('target',measurement)] = np.gradient([point/delT for point in filtered_measurement])
    
         # Create a table
         strain_data = pd.DataFrame(measurement_data,
