@@ -244,7 +244,7 @@ def predict_integrate(ts_data,tr_data,model_dict,targets,features,title,
         
         common_targets = targets
         for i,target in enumerate(common_targets):
-            plt.subplot(2,3,i+1)
+            plt.subplot(3,3,i+1)
             
             for strain in tr_strains:
                 strain_interp_f = {}
@@ -266,7 +266,7 @@ def predict_integrate(ts_data,tr_data,model_dict,targets,features,title,
             
             plt.ylabel(target)
             plt.xlabel('Time [h]')
-            plt.xlim([0,72])
+            #plt.xlim([0,72])
     
     
         plt.tight_layout()
@@ -277,5 +277,5 @@ def predict_integrate(ts_data,tr_data,model_dict,targets,features,title,
                       ('Training Set Data','Test Data','Machine Learning Model Prediction'), 
                       loc = 'lower center', ncol=5, labelspacing=0. ) 
             
-        plt.savefig(figure_path + product + model_type +'_prediction.eps', format='eps', dpi=600)
+        plt.savefig(figure_path + title + model_type +'_prediction.eps', format='eps', dpi=600)
         plt.show()
