@@ -1,4 +1,7 @@
 import pandas as pd
+import numpy as np
+from scipy.interpolate import interp1d
+from scipy.signal import savgol_filter
 
 def generate_dataset(data, strain_list, feature_list, target_list, n_dim):
     
@@ -28,7 +31,7 @@ def generate_dataset(data, strain_list, feature_list, target_list, n_dim):
 
             # extract measurement for the specific strain
             measurement_series = data.loc[strain][measurement]
-            T = data.loc[strain]['Hour'] # series of time points
+            T = data.loc[strain]['Time'] # series of time points
             
             ## extract the start time and end time and the time step
             minT,maxT = min(T),max(T) # start time and end time
