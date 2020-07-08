@@ -4,6 +4,7 @@ from scipy.integrate import quad
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from scipy.interpolate import interp1d
 
 # integrate
 def int_ode(g,y0,times,solver='scipy'):
