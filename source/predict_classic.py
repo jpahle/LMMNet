@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from scipy.interpolate import interp1d
+import math
 
 # integrate
 def int_ode(g,y0,times,solver='scipy'):
@@ -229,6 +230,7 @@ def predict_integrate(ts_data,tr_data,model_dict,targets,features,title,
         
     if plot:
         tr = tr_data
+        tr_strains = tr_data.index.get_level_values(0).unique().tolist()
         fitT = list(map(list, zip(*fit)))
         
         # Create interpolation functions for each feature
