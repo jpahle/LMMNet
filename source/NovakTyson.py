@@ -95,7 +95,7 @@ def simulate_default(debug=False):
 
 def simulate_custom(tfirst=0, tlast=300, step_size=0.2, cyclin=0, MPF=0,
                    wee1_total=1, cdc25_total=5, APC_total=1, IE_total=1,
-                   k1=1, v2_1 = .005, v2_2 = .25):
+                   k1=1, v2_1 = .005, v2_2 = .25, noise=0.):
     """
     Simulate the Novak Tyson Cell Cycle Model with custom parameters.
     
@@ -104,6 +104,7 @@ def simulate_custom(tfirst=0, tlast=300, step_size=0.2, cyclin=0, MPF=0,
     - k1 = synthesis of cyclin
     - v2_1 = degradation of cyclin by APC off
     - v2_2 = degradation of cyclin by APC on
+    - noise = strength of Gaussian noise to be added to the integrated dynamics
     
     Returns:
     - time points
@@ -134,9 +135,14 @@ def simulate_custom(tfirst=0, tlast=300, step_size=0.2, cyclin=0, MPF=0,
     for key,val in default.items():
         globals()[key]=val
     
-    time_points, novak_data = create_training_data(tfirst, tlast, step_size, f_NovakTyson, x0)
+    time_points, novak_data = create_training_data(tfirst, tlast, step_size, f_NovakTyson, x0, noise_strength=noise)
     
     return time_points, novak_data
+
+
+#### #### #### #### #### #### #### #### #### #### #### #### #### 
+######## #### #### #### #### #### #### #### #### #### #### #### 
+####
 
 if __name__ == "__main__":
 
