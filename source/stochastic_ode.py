@@ -134,7 +134,7 @@ def simulate_stochastic(tfirst=0, tlast=300, step_size=0.2, cyclin=0, MPF=0,
 
 if __name__ == "__main__":
 
-    time_points, novak_data = simulate_stochastic()
+    time_points, novak_data = simulate_stochastic(tlast=1500, noise=0.001, step_size=0.2)
 
     result_dict = {}
     result_dict['data'] = novak_data
