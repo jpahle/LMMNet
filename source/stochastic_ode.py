@@ -1,6 +1,13 @@
+import numpy as np
+import pickle
+from scipy.integrate import odeint
+import tensorflow as tf
+
 def f_NovakTyson_stochastic(x,t, noise):
     """
     ODEs for Novak-Tyson cell cycle model.
+    with gaussian disturbances
+    
     There are two main classes of equations:
     1. synthesis/degradation of cyclin
     2. phosporylation/dephosporylation
@@ -49,7 +56,7 @@ def f_NovakTyson_stochastic(x,t, noise):
     return derivatives
 
 
-def sample_dynamics(start_time, end_time, step_size, f, x0, integrator='scipy', noise_strength=0):
+def sample_dynamics(start_time, end_time, step_size, f, x0, noise_strength=0):
     """
     Create tensor array for training by solving the initial value problem and adding noise.
     The ODE is integrated using LSODA from scipy.
@@ -71,12 +78,67 @@ def sample_dynamics(start_time, end_time, step_size, f, x0, integrator='scipy', 
     time_points = np.arange(start_time, end_time, step_size)
     
     # choice of bips integrator (this is future work)
-    if integrator == 'scipy':
-        array = odeint(f, x0, time_points)
-    elif integrator == 'bips':
-        array = integrate_bips(f, x0, time_points)
+    array = odeint(f, x0, time_points, args=(noise_strength,))
         
-    array += noise_strength * array.std(0) * np.random.randn(array.shape[0], array.shape[1])
     training_data = np.reshape(array, (1,array.shape[0], array.shape[1]))
     
     return time_points, tf.convert_to_tensor(training_data, dtype=tf.float32)
+
+
+def simulate_stochastic(tfirst=0, tlast=300, step_size=0.2, cyclin=0, MPF=0,
+                   wee1_total=1, cdc25_total=5, APC_total=1, IE_total=1,
+                   k1=1, v2_1 = .005, v2_2 = .25, noise=0.):
+    """
+    Simulate the stochastic Novak Tyson Cell Cycle Model with custom parameters.
+    
+    Arguments:
+    - cdc25_total = Total cdc25 (needed to maintain cyclin and MPF oscillations)
+    - k1 = synthesis of cyclin
+    - v2_1 = degradation of cyclin by APC off
+    - v2_2 = degradation of cyclin by APC on
+    - noise = strength of Gaussian noise to be added to the integrated dynamics
+    
+    Returns:
+    - time points
+    - virtual time-series measurements for each biochemical species
+    """
+    
+    globals()['wee1_total'] = wee1_total
+    globals()['cdc25_total'] = cdc25_total
+    globals()['APC_total'] = APC_total
+    globals()['IE_total'] = IE_total
+    globals()['k1'] = k1
+    globals()['v2_1'] = v2_1
+    globals()['v2_2'] = v2_2
+    
+    # define initial conditions
+    preMPF = 0
+    cdc25P = 0
+    wee1P = 0
+    IEP = 1
+    APC = 1
+    x0 = np.array([cyclin,MPF,preMPF,cdc25P,wee1P,IEP,APC])
+    
+    # define default parameters
+    default = {'k3':0.005, 'ka':.02,'Ka':.1,'kb':.1,'Kb':1, 'kc':.13, 'Kc':.01, 'kd':.13, 'Kd':1,
+               'vwee_1':.01, 'vwee_2':1, 'v25_1':0.5*.017, 'v25_2':0.5*.17,
+             'ke':.02, 'Ke':1, 'kf':.1, 'Kf':1, 'kg':.02, 'Kg':.01, 'kh':.15, 'Kh':.01, 'PPase':1, 'CDK_total':100, 'IE_total':1, 'APC_total':1}
+    
+    for key,val in default.items():
+        globals()[key]=val
+    
+    time_points, novak_data = sample_dynamics(tfirst, tlast, step_size, f_NovakTyson_stochastic, x0, noise_strength=noise)
+    
+    return time_points, novak_data
+
+
+if __name__ == "__main__":
+
+    time_points, novak_data = simulate_stochastic()
+
+    result_dict = {}
+    result_dict['data'] = novak_data
+    result_dict['t'] = time_points
+    
+    with open(str('stochastic_cellcycle.pkl'), 'wb') as file:
+            pickle.dump(result_dict, file)
