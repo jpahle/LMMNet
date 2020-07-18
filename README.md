@@ -37,6 +37,9 @@ The primary materials I consult are
 * [Bier, Bakker, Westerhoff (2000)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1300712/): ODE Model for 2-D Yeast Glycolytic Oscillator
 * [Costello & Martin (2018)](https://www.nature.com/articles/s41540-018-0054-3): Prediction of dynamics by explicitly computing the derivatives to get labeled data, applied to the mevalonate pathway.
 
+Some other useful resources:
+* [Fourier Series](https://www.youtube.com/watch?v=r6sGWTCMz2k)
+
 ### Comparison with previous approach
 
 One difference is in the design choice: previous approach trained a different model for every species (dependent variable) considered. That is, the model assumed a mapping from multi-species concentrations X to single species derivatives y. The training is the repeated for all 10 metabolites.
