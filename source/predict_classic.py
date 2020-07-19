@@ -279,3 +279,5 @@ def predict_integrate(ts_data,tr_data,model_dict,targets,features,title,
             
         plt.savefig(figure_path + title + model_type +'_prediction.eps', format='eps', dpi=600)
         plt.show()
+        
+    return times, pred

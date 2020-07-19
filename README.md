@@ -63,7 +63,7 @@ Disadvantages of LmmNet:
 
 ### Pending Features
 
-1. Extend LmmNet to use other machine learning methods
+1. Use RNN to take previous time points as features
 2. Explain model predictions
 3. Extend LmmNet to handle missing data and irregular and noisy time-series data
 4. Quantify uncertainty of the predictions
