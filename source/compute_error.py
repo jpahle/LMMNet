@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
-def compute_error(data,model_dict,plot=False, figure_path = './plots/'):
+def compute_error(data,model_dict,plot=False, model_type = None, figure_path = './plots/'):
     
     """
     To check the error of predicted derivative.
@@ -15,7 +15,7 @@ def compute_error(data,model_dict,plot=False, figure_path = './plots/'):
     data -- time-series data of measurements, preprocessed by interpolating and filtering
     model_dict -- a dictionary of trained models or each target
     plot -- decide to plot the result or not
-    
+    model_type -- type of model used
     """
     
     # list of errors
