@@ -137,7 +137,7 @@ def ml_ode(model_dict, data, targets, features, time_index='Hour'):
 
 # write a function to integrate the dynamics and predict time points
 def predict_integrate(ts_data,tr_data,model_dict,targets,features,title,
-              plot=False,model_type=None,solver='scipy', figure_path = './plots/'):
+              plot=False,model_type=None,solver='scipy', figure_path = './plots/', subplots = (3,2)):
     
     """
     Integrate the learned 'ODE' and use it for simulations
@@ -217,7 +217,7 @@ def predict_integrate(ts_data,tr_data,model_dict,targets,features,title,
         rmse_average.append(rmse)
             
          # Calculate RMSE percentage
-        percent_integrand = lambda t: abs(real_fcn(t) - pred_fcn(t))/(real_fcn(t)*max(times))
+        percent_integrand = lambda t: abs(real_fcn(t) - pred_fcn(t))/abs(real_fcn(t)*max(times))
         rmsep = math.sqrt(quad(percent_integrand,min(times),max(times),limit=200)[0])
         rmse_percent.append(rmsep)
         
@@ -244,7 +244,7 @@ def predict_integrate(ts_data,tr_data,model_dict,targets,features,title,
         
         common_targets = targets
         for i,target in enumerate(common_targets):
-            plt.subplot(3,3,i+1)
+            plt.subplot(subplots[0],subplots[1],i+1)
             
             for strain in tr_strains:
                 strain_interp_f = {}
@@ -259,7 +259,8 @@ def predict_integrate(ts_data,tr_data,model_dict,targets,features,title,
                     
             actual_data = [interp_f[target](t) for t in times]
             
-            pos_pred = [max(fitT[i][j],0) for j,t in enumerate(times)]
+            #pos_pred = [max(fitT[i][j],0) for j,t in enumerate(times)]
+            pos_pred = [fitT[i][j] for j,t in enumerate(times)]
             prediction_line, = plt.plot(times,pos_pred)
             
             test_line, = plt.plot(times,actual_data,'g--')

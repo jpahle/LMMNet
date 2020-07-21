@@ -8,6 +8,9 @@ from sklearn.model_selection import ShuffleSplit
 from sklearn.model_selection import learning_curve
 import matplotlib.pyplot as plt
 
+import math
+import seaborn as sns
+
 def train_classic(data,model,plot=False,model_type=None, figure_path='./plots'):
     
     """
