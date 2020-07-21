@@ -1,6 +1,6 @@
 import numpy as np
 import pickle
-from train import create_training_data
+from train_lmmNet import create_training_data
 
 def f_NovakTyson(x,t):
     """

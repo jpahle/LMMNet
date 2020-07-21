@@ -1,5 +1,5 @@
-from model import lmmNet
-from predict import *
+from lmmNet import lmmNet
+from predict_lmmNet import *
 import numpy as np
 import tensorflow as tf
 from scipy.integrate import odeint
@@ -34,16 +34,6 @@ def f_bier(x,t, params=None):
     
     return np.ravel(np.array([r1, r2]))
 
-def f_cubic(x,t):
-    """
-    Return the derivatives (RHS of the ODE)
-    This is a linear system with the form f = A x
-    Args:
-    x -- a 2 x 1 vector of measurements
-    """
-    A = np.array([[-0.1, 2], [-2,-0.1]]) # 2 x 2
-
-    return np.ravel(np.matmul(A,x.reshape(-1, 1)**3))
 
 
 def create_training_data(start_time, end_time, step_size, f, x0, integrator='scipy', noise_strength=0):
@@ -101,11 +91,7 @@ if __name__ == "__main__":
         x0 = np.array([4, 3]) #initial conditions: ATP = 4, G = 3 -- default Bier model
         params = {'Vin': 0.36, 'k1': 0.02, 'kp':4, 'km':15} # damped oscillation
         f = lambda x, t: f_bier(x, t, params)
-    elif args.system == 'Cubic':
-        # 2-D Cubic settings
-        t0, T, h = 0, 25, 0.01
-        x0 = np.array([2,0]) # initial conditions -- default cubic problem
-        f = f_cubic # the system to study
+
     elif args.system == 'Lorenz':
         # 3-D Lorenz settings
         x0 = np.array([-8.0, 7.0, 27])
