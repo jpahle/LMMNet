@@ -42,7 +42,7 @@ def int_ode(g,y0,times,solver='scipy'):
         f = lambda t,x: g(x,t)
         r = ode(f).set_integrator('dopri5',
                                   nsteps=1e4,
-                                  atol=1e-3)
+                                  atol=1e-5)
     
         r.set_initial_value(y0,times[0])
     
