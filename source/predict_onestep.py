@@ -137,7 +137,7 @@ def ml_ode(model_dict, data, targets, features, time_index='Hour'):
 
 # write a function to integrate the dynamics and predict time points
 def predict_integrate(ts_data,tr_data,model_dict,targets,features,title,
-              plot=False,model_type=None,solver='scipy', figure_path = './plots/', subplots = (3,2)):
+              plot=False,model_type=None,solver='scipy', figure_path = './plots/', subplots = (3,2), bio=True):
     
     """
     Integrate the learned 'ODE' and use it for simulations
@@ -153,6 +153,7 @@ def predict_integrate(ts_data,tr_data,model_dict,targets,features,title,
     plot -- decide to plot the result or not
     model_type -- determine the input model
     solver -- string of package used for ode solver
+    bio -- biochemical species? To restrict to positive concentrations
     
     """
     
@@ -259,8 +260,10 @@ def predict_integrate(ts_data,tr_data,model_dict,targets,features,title,
                     
             actual_data = [interp_f[target](t) for t in times]
             
-            #pos_pred = [max(fitT[i][j],0) for j,t in enumerate(times)]
-            pos_pred = [fitT[i][j] for j,t in enumerate(times)]
+            if bio:
+                pos_pred = [max(fitT[i][j],0) for j,t in enumerate(times)]
+            else:
+                pos_pred = [fitT[i][j] for j,t in enumerate(times)]
             prediction_line, = plt.plot(times,pos_pred)
             
             test_line, = plt.plot(times,actual_data,'g--')
