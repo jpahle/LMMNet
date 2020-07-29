@@ -28,15 +28,15 @@ def simulate_default():
     return time_points, data
     
 
-def simulate_custom(noise=0):
+def simulate_custom(noise=0, step=0.01, xinit=2, yinit=0, zinit=1):
     """
     Simulate the 3-D oscillator with linear dynamics
     using the default parameters
     """
     
-    tfirst, tlast, step = 0, 50, 0.01
+    tfirst, tlast = 0, 50
     
-    x0 = np.array([2,0,1]) #initial values
+    x0 = np.array([xinit, yinit, zinit]) #initial values
     
     time_points, data = train_lmmNet.create_training_data(tfirst, tlast, step, f_linear, x0, noise_strength=noise)
     
