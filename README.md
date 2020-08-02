@@ -1,4 +1,4 @@
-# Predicting the Dynamics of Biochemical Systems with Machine Learning and Multi-step Methods
+# Empirical Dynamic Modeling of Biochemical Systems with Machine Learning
 
 ## Master Thesis
 
@@ -9,14 +9,20 @@ https://github.com/jpahle/LMMNet
 
 ### About the Project
 
-Here we blend the classical theory of Linear Multi-step Method with machine learning and neural networks (hence LmmNet).
+Main contributions:
+* we show how data-driven dynamic modeling can be formulated as a supervised learning problem that is solved with machine learning methods
+* we blend the classical theory of Linear Multi-step Method with machine learning and neural networks (hence LmmNet).
+* we evaluate the methods on canonical and complex biochemical systems
+
+The method is also capable of identifying bifurcation:
 
 ![Learnt Dynamics for Hopf Bifurcation](image/learnt-hopf.png)
 
 
 ### Software and Libraries
 
-* Deep Learning Framework: TensorFlow 2.0
+* Deep Learning Framework: TensorFlow
+* Machine Learning Library: Scikit-learn, TPOT
 * Numerics Framework: NodePy, SymPy
 * Scientific Computing Stack: SciPy, NumPy
 
@@ -60,11 +66,3 @@ Advantages of LmmNet:
 
 Disadvantages of LmmNet:
 * assumes regularly sampled time-series data (obvious solution: preprocessing)
-
-### Pending Features
-
-1. Use RNN to take previous time points as features
-2. Explain model predictions
-3. Extend LmmNet to handle missing data and irregular and noisy time-series data
-4. Quantify uncertainty of the predictions
-
