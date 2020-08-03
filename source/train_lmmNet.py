@@ -69,6 +69,22 @@ def create_training_data(start_time, end_time, step_size, f, x0, integrator='sci
     return time_points, tf.convert_to_tensor(training_data, dtype=tf.float32)
 
 
+def train_easy(time_points, data, scheme='AM', M=1, hidden_layer_units=256):
+    """
+    Easy training of LmmNet
+    """
+    # we specify a LMM scheme and number of steps
+    dt = time_points[1] - time_points[0]
+    M = 1
+    scheme = 'AM'
+    model = lmmNet(dt, data, M, scheme, hidden_units=256)
+
+    N_Iter = 10000
+    model.train(N_Iter, debug=False)
+    
+    return model
+
+
 if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(description='Simulate a dynamical system and reconstruct the dynamics with lmmNet.')
@@ -92,11 +108,6 @@ if __name__ == "__main__":
         params = {'Vin': 0.36, 'k1': 0.02, 'kp':4, 'km':15} # damped oscillation
         f = lambda x, t: f_bier(x, t, params)
 
-    elif args.system == 'Lorenz':
-        # 3-D Lorenz settings
-        x0 = np.array([-8.0, 7.0, 27])
-        t0, T, h = 0, 25, 0.01
-        f = lorenz
     elif args.system == 'Ruoff':
         # 7-D Glycolysis settings
         # https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0119821#pone-0119821-t002
