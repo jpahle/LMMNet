@@ -29,3 +29,17 @@ def compute_MSE(pred, data, index):
     pred_array = np.array(pred)
     data = np.squeeze(data)
     return np.linalg.norm(data[:,index] - pred_array[:,index], 2)/np.linalg.norm(data[:,index], 2)
+
+
+def ml_f(x, t, model):
+    """
+    (Obsolete)! Replaced by predict_fn
+    Define the derivatives learned by ML
+    I think this is the best implementation, more robust than flatten()
+    
+    Args:
+    x -- values for the current time point
+    t -- time, dummy argument to conform with scipy's API
+    model -- the learned ML model
+    """
+    return np.ravel(model.predict(x.reshape(1,-1)))
