@@ -1,5 +1,5 @@
 import numpy as np
-import train_lmmNet
+from scipy.integrate import odeint
 
 def f_hopf(x,t):
     
@@ -25,19 +25,16 @@ def f_hopf(x,t):
 
     return np.array([r1, r2, r3])
 
-
-if __name__ == '__main__':
+def simulate_default():
+    """
+    Simulate Hopf data with default settings
+    """
     
-    global args
-    args = parser.parse_args()
+    # define the time domain
+    tfirst, tlast, step = 0, 75, 0.1
+    time_points = np.arange(tfirst, tlast, step)
     
-    # define the problem
-    t0 = args.minTime
-    T = args.maxTime
-    h = args.stepSize
-    time_points = np.arange(t0, T, h)
-
-    # initial conditions to try
+    # initial conditions for training
     x0 = np.array([[-0.15,.01,0],
                    [-0.05,.01,0],
 
@@ -58,8 +55,7 @@ if __name__ == '__main__':
                    [.45,2,0],
                    [.55,2,0]])
     
-    ######################
-    # create training data
+    
     
     S = x0.shape[0] # number of trajectories
     N = time_points.shape[0] # number of time points (i.e. the grid size)
@@ -68,73 +64,11 @@ if __name__ == '__main__':
 
     hopf_data = np.zeros((S, N, D))
     for k in range(0, S):
-        hopf_data[k,:,:] = odeint(f, x0[k,:], time_points)
+        hopf_data[k,:,:] = odeint(f_hopf, x0[k,:], time_points)
 
     hopf_data += noise_strength * hopf_data.std(1, keepdims=True) * np.random.randn(hopf_data.shape[0], hopf_data.shape[1], hopf_data.shape[2])
     
-    #######################
-    # train LmmNet
-    hidden_layer_units = 256 # number of units for the hidden layer
-    M = args.M # number of steps
-    scheme = args.scheme # LMM scheme
-    model = lmmNet(h, hopf_data, M, scheme, hidden_layer_units)
-
-    N_Iter = 10000
-    model.train(N_Iter)
     
-    ########################
-    # inference
-    
-    # initial conditions
-    y0 = np.array([[-0.15,2,0],
-                   [-0.05,2,0],
-
-                   [.05,.01,0],
-                   [.15,.01,0],
-                   [.25,.01,0],
-                   [.35,.01,0],
-                   [.45,.01,0],
-                   [.55,.01,0],
-
-                   [.1,.01,0],
-                   [.2,.01,0],
-                   [.3,.01,0],
-                   [.4,.01,0],
-                   [.5,.01,0],
-                   [.6,.01,0],
-
-                   [0,.01,0],
-
-                   [.05,2,0],
-                   [.15,2,0],
-                   [.25,2,0],
-                   [.35,2,0],
-                   [.45,2,0],
-                   [.55,2,0],
-
-                   [-0.2,2,0],
-                   [-0.1,2,0],
-
-                   [.1,2,0],
-                   [.2,2,0],
-                   [.3,2,0],
-                   [.4,2,0],
-                   [.5,2,0],
-                   [.6,2,0],
-
-                   [0,2,0]])
+    return time_points, hopf_data
     
     
-    hopf_pred = np.zeros((y0.shape[0], time_points.shape[0], y0.shape[1]))
-    
-    for k in range(0, y0.shape[0]):
-        hopf_pred[k,:] = odeint(ml_f, y0[k,:], time_points, args=(model,))
-    
-    hopf = {}
-    hopf['data'] = hopf_data
-    hopf['pred'] = hopf_pred
-    hopf['t'] = time_points
-
-    # save to file
-    with open('3-d_bifurcation.pkl', 'wb') as file:
-            pickle.dump(hopf, file)
