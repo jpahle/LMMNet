@@ -73,19 +73,18 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
 
-    elif args.system == 'Ruoff':
-        # 7-D Glycolysis settings
-        # https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0119821#pone-0119821-t002
-        x0 = np.zeros(7)
-        x0[0] = np.random.uniform(0.15, 1.6, size=1)
-        x0[1] = np.random.uniform(0.19, 2.16, size = 1)
-        x0[2] = np.random.uniform(0.04, 0.2, size=1)
-        x0[3] = np.random.uniform(0.1, 0.35, size=1)
-        x0[4] = np.random.uniform(0.08, 0.3, size = 1)
-        x0[5] = np.random.uniform(0.14, 2.67, size = 1)
-        x0[6] = np.random.uniform(0.05, 0.1, size=1)     
-        t0, T, h = 0, 10, 0.01
-        f = ruoff
+#         # 7-D Glycolysis settings
+#         # https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0119821#pone-0119821-t002
+#         x0 = np.zeros(7)
+#         x0[0] = np.random.uniform(0.15, 1.6, size=1)
+#         x0[1] = np.random.uniform(0.19, 2.16, size = 1)
+#         x0[2] = np.random.uniform(0.04, 0.2, size=1)
+#         x0[3] = np.random.uniform(0.1, 0.35, size=1)
+#         x0[4] = np.random.uniform(0.08, 0.3, size = 1)
+#         x0[5] = np.random.uniform(0.14, 2.67, size = 1)
+#         x0[6] = np.random.uniform(0.05, 0.1, size=1)     
+#         t0, T, h = 0, 10, 0.01
+#         f = ruoff
         
     hidden_layer_units = 256 # number of units for the hidden layer
     M = 1 # number of steps
