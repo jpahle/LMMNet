@@ -44,12 +44,12 @@ def simulate_default():
     return time_points, bier_data
 
         
-def simulate_custom(t0 = 0, T = 1000, h=0.2, params={'Vin': 0.36, 'k1': 0.02, 'kp':4, 'km':15}):
+def simulate_custom(t0 = 0, T = 1000, h=0.2, params={'Vin': 0.36, 'k1': 0.02, 'kp':4, 'km':15}, x0 = [4,3]):
     """
     The default parameters in the params argument are for damped oscillation
     """
     
-    x0 = np.array([4, 3]) #initial conditions: ATP = 4, G = 3 -- default Bier model
+    x0 = np.array(x0) #initial conditions: ATP = 4, G = 3 -- default Bier model
     time_points = np.arange(t0, T, h)
     bier_data = odeint(lambda x, t: f_bier(x, t, params), x0, time_points)
     

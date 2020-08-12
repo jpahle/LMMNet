@@ -256,7 +256,7 @@ def predict_integrate(ts_data,tr_data,model_dict,targets,features,title,
                 
                 actual_data = [strain_interp_f[target](t) for t in times]
                 
-                train_line, = plt.plot(times,actual_data,'r--')
+                train_line, = plt.plot(times,actual_data,'g--')
                     
             actual_data = [interp_f[target](t) for t in times]
             
@@ -266,7 +266,7 @@ def predict_integrate(ts_data,tr_data,model_dict,targets,features,title,
                 pos_pred = [fitT[i][j] for j,t in enumerate(times)]
             prediction_line, = plt.plot(times,pos_pred)
             
-            test_line, = plt.plot(times,actual_data,'g--')
+            test_line, = plt.plot(times,actual_data,'r--')
             
             plt.ylabel(target)
             plt.xlabel('Time [h]')
