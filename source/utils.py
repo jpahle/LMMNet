@@ -28,6 +28,26 @@ def create_data(data_tensor, times, cols, num=0):
     print('Shape of the dataframe is:', df.shape)
     return df
 
+
+def create_data_numpy(data_numpy, times, cols, num=0):
+    """
+    A helper function to create dataframe from tensors
+    
+    Args:
+    data_tensor -- the data tensor of 3 dimensions (trajectories, time points, species)
+    num -- the 'strain' to be used as index value (row names)
+    cols -- the column names for the dataframe
+    times -- time points
+    """
+    df = pd.DataFrame(data_numpy)
+    df.columns = cols
+    df['Strain'] = [num] * df.shape[0]
+    df = df.set_index('Strain')
+    df['Time'] = times
+    print('Shape of the dataframe is:', df.shape)
+    return df
+
+
 # train model and make predictions
 def end_to_end_training(df, df_train, df_test, feature_list, target_list, plot_size):
     """

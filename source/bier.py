@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.integrate import odeint
+import train_lmmNet
 
 def f_bier(x,t, params=None):
     """
