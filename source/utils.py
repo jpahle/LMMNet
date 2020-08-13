@@ -49,9 +49,10 @@ def create_data_numpy(data_numpy, times, cols, num=0):
 
 
 # train model and make predictions
-def end_to_end_training(df, df_train, df_test, feature_list, target_list, plot_size):
+def end_to_end_training(df, df_train, df_test, feature_list, target_list, plot_size, title):
     """
     Do end-to-end training with random forest
+    
     df_train: training data augmented
     df_test: test data raw
     df: training data raw
@@ -65,6 +66,6 @@ def end_to_end_training(df, df_train, df_test, feature_list, target_list, plot_s
     
     # now we make predictions via numerical integration
     # note that in predict_integrate, the function expects a normal dataframe and not the time-series multi-index dataframe
-    time_points, predictions = predict_onestep.predict_integrate(df_test, df, rf_dict, target_list, feature_list, title='damped harmonic', plot=True,model_type='random_forest', subplots=plot_size, bio=False)
+    time_points, predictions = predict_onestep.predict_integrate(df_test, df, rf_dict, target_list, feature_list, title=title, plot=True,model_type='random_forest', subplots=plot_size, bio=False)
     
     return time_points, predictions
