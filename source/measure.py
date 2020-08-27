@@ -18,6 +18,17 @@ from scipy.stats import entropy
 from scipy.spatial.distance import euclidean
 from fastdtw import fastdtw
 
+def compute_average(elist):
+    
+    """
+    Helper function to compute the average of the error report
+    """
+    
+    avg_list = []
+    for etuple in elist:
+        avg_list.append(np.mean(etuple))
+    mean_avg = np.mean(avg_list)
+    return avg_list, mean_avg
 
 def report_harmonic_onestep(metric_function):
     
@@ -55,6 +66,55 @@ def report_harmonic_onestep(metric_function):
         elif metric_function == "dtw":
             e1, _ = fastdtw(predictions[:,0], test_data[0,:,0], dist=euclidean)
             e2, _ = fastdtw(predictions[:,1], test_data[0,:,1], dist=euclidean)
+            e1 /= np.linalg.norm(test_data[0,:,0], 2)**2
+            e2 /= np.linalg.norm(test_data[0,:,1], 2)**2
+            
+        elif metric_function == "mse":
+            e1 = predict_lmmNet.compute_MSE(predictions, test_data[0], 0)
+            e2 = predict_lmmNet.compute_MSE(predictions, test_data[0], 1)
+        error_list.append((e1, e2))
+        
+        # plot
+        plt.plot(time_points, test_data[0,:,0], 'r.', label='x_1')
+        plt.plot(time_points, test_data[0,:,1], 'y.', label='x_2')
+        plt.plot(time_points, predictions[:,0], 'b--', label='predicted x_1')
+        plt.plot(time_points, predictions[:,1], 'b--', label='predicted x_2')
+        plt.title(str(xi) + " " + str(yi))
+        plt.legend()
+        plt.show()
+        
+    return error_list
+
+
+
+
+def report_harmonic_lmmnet(metric_function):
+    
+    error_list = []
+    
+    time_points, test_data = harmonic.simulate_custom(xinit=1, yinit=0)
+
+
+    for _ in range(10):
+        # generate data with random initial conditions
+        xi = np.random.uniform(0, 4, 1)[0]
+        yi = np.random.uniform(0, 4, 1)[0]
+        time_points, cubic_data = harmonic.simulate_custom(xinit=xi, yinit=yi)
+
+        model = train_lmmNet.train_easy(time_points, cubic_data)
+        x0 = test_data[0,0,:] # initial conditions
+        predicted_traj = odeint(lambda x, t: predict_lmmNet.predict_fn(x, t, model), x0, time_points)
+
+        predictions = predicted_traj
+        if metric_function == "wasserstein":
+            e1 = wasserstein_distance(predictions[:,0], test_data[0,:,0])
+            e2 = wasserstein_distance(predictions[:,1], test_data[0,:,1])
+            
+        elif metric_function == "dtw":
+            e1, _ = fastdtw(predictions[:,0], test_data[0,:,0], dist=euclidean)
+            e2, _ = fastdtw(predictions[:,1], test_data[0,:,1], dist=euclidean)
+            e1 /= np.linalg.norm(test_data[0,:,0], 2)**2
+            e2 /= np.linalg.norm(test_data[0,:,1], 2)**2
             
         elif metric_function == "mse":
             e1 = predict_lmmNet.compute_MSE(predictions, test_data[0], 0)
