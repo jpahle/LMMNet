@@ -7,6 +7,7 @@ from utils import *
 import matplotlib.pyplot as plt
 from sklearn.ensemble import BaggingRegressor, RandomForestRegressor
 import harmonic
+import linear
 from lmmNet import *
 import train_onestep
 import predict_onestep
@@ -127,6 +128,59 @@ def report_harmonic_lmmnet(metric_function):
         plt.plot(time_points, predictions[:,0], 'b--', label='predicted x_1')
         plt.plot(time_points, predictions[:,1], 'b--', label='predicted x_2')
         plt.title(str(xi) + " " + str(yi))
+        plt.legend()
+        plt.show()
+        
+    return error_list
+
+
+def report_linear_lmmnet(metric_function):
+    
+    error_list = []
+    
+    time_points, test_data = linear.simulate_default()
+
+
+    for _ in range(10):
+        # generate data with random initial conditions
+        xi = np.random.uniform(1, 4, 1)[0]
+        yi = np.random.uniform(0, 4, 1)[0]
+        zi = np.random.uniform(1, 2, 1)[0]
+        time_points, cubic_data = linear.simulate_custom(xinit=xi, yinit=yi, zinit=zi)
+
+        model = train_lmmNet.train_easy(time_points, cubic_data)
+        x0 = test_data[0,0,:] # initial conditions
+        predicted_traj = odeint(lambda x, t: predict_lmmNet.predict_fn(x, t, model), x0, time_points)
+
+        predictions = predicted_traj
+        if metric_function == "wasserstein":
+            e1 = wasserstein_distance(predictions[:,0], test_data[0,:,0])
+            e2 = wasserstein_distance(predictions[:,1], test_data[0,:,1])
+            e3 = wasserstein_distance(predictions[:,2], test_data[0,:,2])
+            
+        elif metric_function == "dtw":
+            e1, _ = fastdtw(predictions[:,0], test_data[0,:,0], dist=euclidean)
+            e2, _ = fastdtw(predictions[:,1], test_data[0,:,1], dist=euclidean)
+            e3, _ = fastdtw(predictions[:,2], test_data[0,:,2], dist=euclidean)
+            e1 /= np.linalg.norm(test_data[0,:,0], 2)**2
+            e2 /= np.linalg.norm(test_data[0,:,1], 2)**2
+            e3 /= np.linalg.norm(test_data[0,:,2], 2)**2
+            
+        elif metric_function == "mse":
+            e1 = predict_lmmNet.compute_MSE(predictions, test_data[0], 0)
+            e2 = predict_lmmNet.compute_MSE(predictions, test_data[0], 1)
+            e3 = predict_lmmNet.compute_MSE(predictions, test_data[0], 2)
+        error_list.append((e1, e2, e3))
+        
+        # plot
+        plt.figure(figsize=(20, 10))
+        plt.plot(time_points, test_data[0,:,0], 'r.', label='x_1')
+        plt.plot(time_points, test_data[0,:,1], 'y.', label='x_2')
+        plt.plot(time_points, test_data[0,:,1], 'g.', label='x_2')
+        plt.plot(time_points, predictions[:,0], 'b--', label='predicted dynamics')
+        plt.plot(time_points, predictions[:,1], 'b--')
+        plt.plot(time_points, predictions[:,2], 'b--')
+        plt.title(str(xi) + " " + str(yi) + " " + str(zi))
         plt.legend()
         plt.show()
         
