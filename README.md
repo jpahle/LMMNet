@@ -45,6 +45,7 @@ The primary materials I consult are
 
 Some other useful resources:
 * [Fourier Series](https://www.youtube.com/watch?v=r6sGWTCMz2k)
+* [Dynamic Time Warping](https://www.youtube.com/watch?v=_K1OsqCicBY)
 
 ### Comparison with previous approach
 
