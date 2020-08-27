@@ -176,7 +176,7 @@ def report_linear_lmmnet(metric_function):
         plt.figure(figsize=(20, 10))
         plt.plot(time_points, test_data[0,:,0], 'r.', label='x_1')
         plt.plot(time_points, test_data[0,:,1], 'y.', label='x_2')
-        plt.plot(time_points, test_data[0,:,1], 'g.', label='x_2')
+        plt.plot(time_points, test_data[0,:,2], 'g.', label='x_3')
         plt.plot(time_points, predictions[:,0], 'b--', label='predicted dynamics')
         plt.plot(time_points, predictions[:,1], 'b--')
         plt.plot(time_points, predictions[:,2], 'b--')
