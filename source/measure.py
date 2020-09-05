@@ -249,39 +249,110 @@ def report_linear_onestep(metric_function):
     return error_list
 
 
-def report_harmonic_sindy(metric_function):
+def report_harmonic_sindy():
     error_list = []
-    time_points, test_data = harmonic.simulate_custom(xinit=1, yinit=0)
+    
     for _ in range(10):
-        xi = np.random.uniform(0, 4, 1)[0]
-        yi = np.random.uniform(0, 4, 1)[0]
-        _ , cubic_data = harmonic.simulate_custom(xinit=xi, yinit=yi)
+        error_dict = {}
+        xi = np.random.uniform(-4, 4, 1)[0]
+        yi = np.random.uniform(-4, 4, 1)[0]
+        time_points, test_data = harmonic.simulate_custom(xinit=xi, yinit=yi)
 
-        t0, T, h = 0, 25, 0.01
-        xy = np.array([xi, yi])
-        _, pred = train_lmmNet.create_training_data(t0, T, h, sindy_harmonic, xy)
-        if metric_function == "wasserstein":
-            e1 = wasserstein_distance(predictions[:,0], test_data[0,:,0])
-            e2 = wasserstein_distance(predictions[:,1], test_data[0,:,1])
+        t0, T, h = 0, 25, .01
+        _, pred = train_lmmNet.create_training_data(t0, T, h, sindy_harmonic, test_data[0,0,:])
+        predictions = pred[0]
+        e1 = wasserstein_distance(predictions[:,0], test_data[0,:,0])
+        e2 = wasserstein_distance(predictions[:,1], test_data[0,:,1])
+        error_dict['wasserstein'] = (e1, e2)
 
-        elif metric_function == "dtw":
-            e1, _ = fastdtw(predictions[:,0], test_data[0,:,0], dist=euclidean)
-            e2, _ = fastdtw(predictions[:,1], test_data[0,:,1], dist=euclidean)
-            e1 /= np.linalg.norm(test_data[0,:,0], 2)**2
-            e2 /= np.linalg.norm(test_data[0,:,1], 2)**2
+        e1, _ = fastdtw(predictions[:,0], test_data[0,:,0], dist=euclidean)
+        e2, _ = fastdtw(predictions[:,1], test_data[0,:,1], dist=euclidean)
+        e1 /= np.linalg.norm(test_data[0,:,0], 2)**2
+        e2 /= np.linalg.norm(test_data[0,:,1], 2)**2
 
-        elif metric_function == "mse":
-            e1 = predict_lmmNet.compute_MSE(predictions, test_data[0], 0)
-            e2 = predict_lmmNet.compute_MSE(predictions, test_data[0], 1)
-        error_list.append((e1, e2))
-        
+        error_dict['dtw'] = (e1, e2)
+
+        e1 = predict_lmmNet.compute_MSE(predictions, test_data[0], 0)
+        e2 = predict_lmmNet.compute_MSE(predictions, test_data[0], 1)
+        error_dict['mse'] = (e1, e2)
+
         # plot
         plt.plot(time_points, test_data[0,:,0], 'r.', label='x_1')
         plt.plot(time_points, test_data[0,:,1], 'y.', label='x_2')
-        plt.plot(time_points, pred[0,:,0], 'b--', label='predicted x_1')
-        plt.plot(time_points, pred[0,:,1], 'b--')
-        plt.title(str(xi) + " " + str(yi))
+        plt.plot(time_points, predictions[:,0], 'b--', label='predicted x_1')
+        plt.plot(time_points, predictions[:,1], 'b--')
         plt.legend()
         plt.show()
         
+        error_list.append(error_dict)
+        
     return error_list
+
+def report_linear_sindy():
+    
+    error_list = []
+    
+    for _ in range(10):
+    
+        error_dict = {}
+        xi = np.random.uniform(-4, 4, 1)[0]
+        yi = np.random.uniform(-4, 4, 1)[0]
+        zi = np.random.uniform(0, 2, 1)[0]
+        time_points, test_data = linear.simulate_custom(xinit=xi, yinit=yi, zinit=zi)
+
+        t0, T, h = 0, 50, .01
+        _, pred = train_lmmNet.create_training_data(t0, T, h, sindy_linear, test_data[0,0,:])
+        predictions = pred[0]
+        e1 = wasserstein_distance(predictions[:,0], test_data[0,:,0])
+        e2 = wasserstein_distance(predictions[:,1], test_data[0,:,1])
+        e3 = wasserstein_distance(predictions[:,2], test_data[0,:,2])
+        error_dict['wasserstein'] = (e1, e2, e3)
+
+        e1, _ = fastdtw(predictions[:,0], test_data[0,:,0], dist=euclidean)
+        e2, _ = fastdtw(predictions[:,1], test_data[0,:,1], dist=euclidean)
+        e3, _ = fastdtw(predictions[:,2], test_data[0,:,2], dist=euclidean)
+        e1 /= np.linalg.norm(test_data[0,:,0], 2)**2
+        e2 /= np.linalg.norm(test_data[0,:,1], 2)**2
+        e3 /= np.linalg.norm(test_data[0,:,2], 2)**2
+
+        error_dict['dtw'] = (e1, e2, e3)
+
+        e1 = predict_lmmNet.compute_MSE(predictions, test_data[0], 0)
+        e2 = predict_lmmNet.compute_MSE(predictions, test_data[0], 1)
+        e3 = predict_lmmNet.compute_MSE(predictions, test_data[0], 2)
+        error_dict['mse'] = (e1, e2, e3)
+
+        # plot
+        plt.plot(time_points, test_data[0,:,0], 'r.', label='x_1')
+        plt.plot(time_points, test_data[0,:,1], 'y.', label='x_2')
+        plt.plot(time_points, test_data[0,:,2], 'g.', label='x_3')
+        plt.plot(time_points, predictions[:,0], 'b--', label='predicted x_1')
+        plt.plot(time_points, predictions[:,1], 'b--')
+        plt.plot(time_points, predictions[:,2], 'b--')
+        plt.legend()
+        plt.show()
+
+        error_list.append(error_dict)
+        
+    return error_list
+
+# SINDy results
+
+def sindy_harmonic(x,t):
+    """
+    The dynamics of cubic oscillator identified by SINDy
+    
+    The parameters are taken directly from the original paper (Brunton 2015).
+    """
+    A = np.array([[-0.0996, 1.997], [-1.9994,-0.0979]]) # 2 x 2
+
+    return np.ravel(np.matmul(A,x.reshape(-1, 1)**3))
+
+def sindy_linear(x,t):
+    """
+    The dynamics of linear oscillator identified by SINDy
+    The parameters are taken directly from the original paper (Brunton 2015).
+    """
+    A = np.array([[-0.0996, -2.0005, 0], [1.9997,-0.0994, 0], [0, 0, -0.3003]]) # 3 x 3
+
+    return np.ravel(np.matmul(A,x.reshape(-1, 1)))
