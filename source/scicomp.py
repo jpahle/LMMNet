@@ -7,6 +7,9 @@ def normalize(v):
     
     return v/np.linalg.norm(v)
 
+def NormalizeData(data):
+    return (data - np.min(data)) / (np.max(data) - np.min(data))
+
 def get_mse(pred, dat):
     e1 = predict_lmmNet.compute_MSE(pred, dat, 0)
     e2 = predict_lmmNet.compute_MSE(pred, dat, 1)
