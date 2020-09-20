@@ -19,17 +19,21 @@ The method is also capable of identifying bifurcation:
 ![Learnt Dynamics for Hopf Bifurcation](image/learnt-hopf.png)
 
 
+Keywords:
+- Dynamical Systems
+- Systems Biology
+- Machine Learning
+- Neural Network
+
+Traditionally, the method of discovering dynamics from data was known as *system identification* before machine learning libraries were made open-source commodity. However, systems identification is recognized as a hard problem in the physical sciences. Here, I want to show that a machine learning approach can help accelerate and transform how dynamic modeling is done in the sciences.
+
+
 ### Software and Libraries
 
-* Deep Learning Framework: TensorFlow
+* Deep Learning Framework: TensorFlow 2.x
 * Machine Learning Library: Scikit-learn, TPOT
 * Numerics Framework: NodePy, SymPy
 * Scientific Computing Stack: SciPy, NumPy
-
-### Upcoming Events
-
-- [Fields Symposium, September 21-25 2020](https://sites.google.com/site/boumedienehamzi/second-symposium-on-machine-learning-and-dynamical-systems)
-- [SAMM 2020](https://www.mpi-magdeburg.mpg.de/csc/events/samm20)
 
 ### References
 
@@ -42,10 +46,9 @@ The primary materials I consult are
 * [Rackauckas, Ma, Martensen, Warner, Zubov, Supekar, Skinner, Ramadhan (2020)](https://arxiv.org/abs/2001.04385): Augmentation of differential equations with machine-learnable components (termed Universal Differential Equations/UDE) for discovering governing equations from data
 * [Bier, Bakker, Westerhoff (2000)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1300712/): ODE Model for 2-D Yeast Glycolytic Oscillator
 * [Costello & Martin (2018)](https://www.nature.com/articles/s41540-018-0054-3): Prediction of dynamics by explicitly computing the derivatives to get labeled data, applied to the mevalonate pathway.
+* Villaverde, A. F. & Banga, J. R. Reverse engineering and identification in systems biology: strategies, perspectives and challenges. J. R. Soc. Interface 11, 20130505 (2013).
+* [Universal Differential Equations for Scientific Machine Learning](https://arxiv.org/abs/2001.04385)
 
-Some other useful resources:
-* [Fourier Series](https://www.youtube.com/watch?v=r6sGWTCMz2k)
-* [Dynamic Time Warping](https://www.youtube.com/watch?v=_K1OsqCicBY)
 
 ### Comparison with previous approach
 
@@ -67,3 +70,5 @@ Advantages of LmmNet:
 
 Disadvantages of LmmNet:
 * assumes regularly sampled time-series data (obvious solution: preprocessing)
+
+
